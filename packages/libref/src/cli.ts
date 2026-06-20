@@ -127,7 +127,7 @@ async function downloadFile(url: string, destPath: string): Promise<void> {
   await pipeline(nodeStream, fileStream);
 }
 
-const DATA_DIR = join(homedir(), ".context", "packages");
+const DATA_DIR = join(homedir(), ".libref", "packages");
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -648,7 +648,7 @@ export function resolveAllowedLibraries(
   if (errors.length > 0) {
     console.error("Cannot start --libs session:");
     for (const e of errors) console.error(e);
-    console.error("Run `context list` to see installed packages.");
+    console.error("Run `libref list` to see installed packages.");
     process.exit(1);
   }
 
@@ -656,7 +656,7 @@ export function resolveAllowedLibraries(
 }
 
 const program = new Command()
-  .name("context")
+  .name("libref")
   .description("Local-first documentation for AI agents")
   .version(version);
 
@@ -1123,7 +1123,7 @@ program
 
     if (packages.length === 0) {
       console.log("No packages installed.");
-      console.log("Run: context add <package.db>");
+      console.log("Run: libref add <package.db>");
       return;
     }
 
@@ -1204,7 +1204,7 @@ program
         console.error(`${prefix} ${visible.length} packages: ${names}`);
       } else {
         console.error("Context MCP Server starting...");
-        console.error("No packages installed. Run: context add <package.db>");
+        console.error("No packages installed. Run: libref add <package.db>");
       }
 
       const server = new ContextServer(store, { allowedLibraries });
@@ -1269,7 +1269,7 @@ program
       const available = packages.map(formatLibraryName);
       if (available.length === 0) {
         console.error("Error: No packages installed.");
-        console.error("Run: context add <package.db>");
+        console.error("Run: libref add <package.db>");
       } else {
         console.error(`Error: Package not found: ${library}`);
         const maxShow = 5;
@@ -1364,7 +1364,7 @@ program
         console.log(`  ${id.padEnd(32)} ${size}${desc}`);
       }
       console.log(
-        `\nFound ${results.length} version${results.length === 1 ? "" : "s"}. Install with: context install ${registry}/${name}`,
+        `\nFound ${results.length} version${results.length === 1 ? "" : "s"}. Install with: libref install ${registry}/${name}`,
       );
     } catch (err) {
       console.error(`Error: ${err instanceof Error ? err.message : err}`);
@@ -1488,7 +1488,7 @@ program
         const domains = Object.keys(auth);
         if (domains.length === 0) {
           console.log("No platform auth configured.");
-          console.log("Run: context auth add <domain> --cookies <cookies>");
+          console.log("Run: libref auth add <domain> --cookies <cookies>");
           return;
         }
         console.log("Configured platform auth:\n");
@@ -1539,8 +1539,8 @@ function collectHeaders(
 // Only parse when run directly (not when imported for testing)
 const isRunDirectly =
   process.argv[1]?.endsWith("cli.js") ||
-  process.argv[1]?.endsWith("context") ||
-  process.argv[1]?.includes("bin/context");
+  process.argv[1]?.endsWith("libref") ||
+  process.argv[1]?.includes("bin/libref");
 
 if (isRunDirectly) {
   await initDatabase();
