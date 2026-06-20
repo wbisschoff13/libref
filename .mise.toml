@@ -10,3 +10,15 @@ pnpm install
 pnpm --filter @wbisschoff13/libref build
 (cd packages/libref && pnpm link --global)
 """
+
+[tasks.changeset]
+description = "Create a new changeset for the next release"
+run = "pnpm changeset"
+
+[tasks.release]
+description = "Build, publish libref to npm, and create git tags"
+run = """
+pnpm --filter @wbisschoff13/libref build
+pnpm --filter @wbisschoff13/libref publish
+pnpm tags
+"""
